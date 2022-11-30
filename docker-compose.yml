@@ -1,0 +1,31 @@
+#Menulis Docker Compose menggunakan schema version 3.7 
+version: "3.7"
+
+#Mendefinisikan Service
+services:
+  #Mendefinisikan Service item-db
+  item-db:
+    #Mengambil image dari docker hub mongodb
+    image: mongo:3
+    #Menerapkan Restart Policy agar container selalu restart ketika terhenti
+    restart: always
+    #Menggunakan Volume app-db dan memasangnya ke directory /data/db
+    volumes:
+      - app-db:/data/db
+    
+  #Mendefinisikan Service item-app
+  item-app:
+    #Mengambil image dari github package
+    image: ghcr.io/sanikhsan/a433-microservices/item-app:v1
+
+    #Menerapkan Restart Policy agar container selalu restart ketika terhenti
+    restart: always
+    #Mengekspos port 80 untuk host
+    ports:
+      - 80:8080
+    depends_on:
+      - item-db
+
+#Mendifinisikan Volume dengan nama app-db
+volumes:
+  app-db:
