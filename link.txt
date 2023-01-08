@@ -1,0 +1,11 @@
+# Tautan Github Packages 
+
+Karsajobs : https://github.com/users/sanikhsan/packages/container/package/a433-microservices%2Fkarsajobs
+
+Karsajobs-ui : https://github.com/users/sanikhsan/packages/container/package/a433-microservices%2Fkarsajobs-ui
+
+# Tautan Github Repo hasil Fork
+https://github.com/sanikhsan/a433-microservices
+
+# Tautan Direktori Kubernetes yang berisi semua manifest untuk Submission
+https://github.com/sanikhsan/a433-microservices/tree/kubernetes
