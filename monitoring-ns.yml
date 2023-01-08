@@ -1,0 +1,9 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: v1
+
+# Mendefinisikan resource sebagai Namespace
+kind: Namespace
+
+# Mendefinisikan nama sebagai monitoring
+metadata:
+  name: monitoring
