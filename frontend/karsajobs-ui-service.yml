@@ -1,0 +1,25 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: v1
+
+# Mendefinisikan resource sebagai Service
+kind: Service
+
+# Mendefinisikan nama Service 'karsajobs' dan label 'frontend'
+metadata:
+  labels:
+    app: frontend
+  name: karsajobs
+
+# Menentukan Spesifikasi
+spec:
+
+  # Mengekspos port 8000
+  ports:
+  - port: 8000
+
+  # Menargetkan Pod yang memiliki Label type frontend
+  selector:
+    type: frontend
+
+  # Memakai tipe NodePort.
+  type: NodePort

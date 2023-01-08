@@ -1,0 +1,63 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: apps/v1
+
+# Mendefinisikan resource object Deployment
+kind: Deployment
+
+# Mendefinisikan nama Deployments 'karsajobs' dengan label 'backend' dan type 'backend'
+metadata:
+  labels:
+    app: backend
+    type: backend
+  name: karsajobs
+
+# Spesifikasi Deployment
+spec:
+
+  # Menentukan replica Pod berjumlah 1
+  replicas: 1
+
+  # Selector untuk mengidentifikasi Pod yang memiliki label type:backend
+  selector:
+    matchLabels:
+      type: backend
+
+  # Pod template untuk metadata
+  template:
+    metadata:
+
+      # Menargetkan Pod yang memiliki Label type backend
+      labels:
+        app: backend
+        type: backend
+
+    # Pod template untuk spesifikasi Container
+    spec:
+      containers:
+        # Memberi nama karsajobs-backend
+        - name: karsajobs-backend
+
+          # Mengambil image dari github package
+          image: ghcr.io/sanikhsan/a433-microservices/karsajobs:latest
+
+          # Mengekspos Port 8080
+          ports:
+            - containerPort: 8080
+
+          # Menentukan Environment Variable untuk APP_PORT, MONGO_HOST, MONGO_USER ,MONGO_PASS
+          env:
+            - name: APP_PORT
+              value: '8080'
+            - name: MONGO_HOST
+              value: mongodb
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_ROOT_USERNAME
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_ROOT_PASSWORD
+

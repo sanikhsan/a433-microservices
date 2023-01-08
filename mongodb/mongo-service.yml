@@ -1,0 +1,20 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: v1
+
+# Mendefinisikan resource sebagai Service
+kind: Service
+
+# Mendefinisikan nama sebagai mongodb
+metadata:
+  name: mongodb
+
+# Menentukan Spesifikasi
+spec:
+
+  # Mengekpos port 27017
+  ports:
+    - port: 27017
+  # Menargetkan Pod yang memiliki Label type db
+  selector:
+    type: db
+  clusterIP: None

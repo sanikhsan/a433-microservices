@@ -1,0 +1,49 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: v1
+
+# Mendefinisikan resource object sebagai PersistentVolume
+kind: PersistentVolume
+
+# Mendefinisikan nama sebagai mongodb-pv-volume
+metadata:
+  name: mongodb-pv-volume
+
+# Menentukan Spesifikasi
+spec:
+  storageClassName: manual
+
+  # Mendefinisikan nilai kapasitas 2 gigabytes
+  capacity:
+    storage: 2Gi
+
+  # Mendefinisikan akses mode hanya bisa dipasang oleh satu Node
+  accessModes:
+    - ReadWriteOnce
+
+  # Mendefinisikan path data di host
+  hostPath:
+    path: '/mnt/data/mongodb'
+
+--- 
+
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: v1
+
+# Mendefinisikan resource object sebagai PersistentVolumeClaim
+kind: PersistentVolumeClaim
+
+# Mendefinisikan nama sebagai mongodb-pv-claim
+metadata:
+  name: mongodb-pv-claim
+
+# Menentukan Spesifikasi yang akan dicari seperti
+# Penyimpanan manual
+# Mode Akses ReadWriteOnce
+# dan kapasitas penyimpanan 2 gigabytes
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

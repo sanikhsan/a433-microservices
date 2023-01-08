@@ -1,0 +1,16 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: v1
+
+# Mendefinisikan resource object sebagai ConfigMap
+kind: ConfigMap
+
+# Mendefinisikan nama ConfigMap sebagai mongodb-config
+metadata:
+  name: mongodb-config
+data:
+
+  # Memdefinisikan data sebagai file mongo.conf dengan storage
+  # Mendefinisikan dbPath sebagai key dan /data/db sebagai value
+  mongo.conf: |
+    storage:
+      dbPath: /data/db

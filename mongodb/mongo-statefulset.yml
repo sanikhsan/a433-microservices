@@ -1,0 +1,81 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: apps/v1
+
+# Mendefinisikan resource sebagai StatefulSet
+kind: StatefulSet
+
+# Mendefinisikan nama sebagai mongodb
+metadata:
+  name: mongodb
+
+# Menentukan Spesifikasi
+spec:
+
+  # Selector Pod yang memiliki label type:db
+  selector:
+    matchLabels:
+      type: db
+
+  # Menggunakan service bernama mongodb
+  serviceName: mongodb
+
+  # Menentukan replica Pod berjumlah 1
+  replicas: 1
+  minReadySeconds: 10
+
+  # Pod template untuk metadata
+  template:
+    metadata:
+
+      # Menargetkan Pod yang memiliki Label type db
+      labels:
+        type: db
+    
+    # Pod template untuk spesifikasi Container
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        # Mengambil image mongo dari docker hub dengan versi terbaru
+        - image: mongo:latest
+
+          # Memberi nama mongodb
+          name: mongodb
+
+          # Menentukan Environment Variable untuk 'MONGO_INITDB_ROOT_USERNAME_FILE' dan 'MONGO_INITDB_ROOT_PASSWORD_FILE'
+          # diambil dari direktori /etc/mongo-credentials dan terpasang di volume mongodb-secret-mount
+          # direktori /data/db yang terpasang dari Persistent Volume bernama mongodb-persistent-storage
+          # direktori /config yang terpasang dengan volume mongodb-config-mount
+          # dan file mongo.conf akan dibuat dalam direktori yang berisi nilai dari configMap mongodb-config.
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE
+              value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+              value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
+          
+          # Mengekspos port 27017
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          volumeMounts:
+            - name: mongodb-persistent-storage
+              mountPath: /data/db
+            - name: mongodb-secret-mount
+              mountPath: /etc/mongo-credentials
+            - name: mongodb-config-mount
+              mountPath: /config
+              readOnly: true
+
+      # Volume dengan nama mongodb-persistent-storage dengan Persistent Volume Claim bernama mongodb-pv-claim
+      volumes:
+        - name: mongodb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pv-claim
+        - name: mongodb-secret-mount
+          secret:
+            secretName: mongodb-secret
+        - name: mongodb-config-mount
+          configMap:
+            name: mongodb-config
+            items:
+              - key: mongo.conf
+                path: mongo.conf

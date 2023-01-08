@@ -1,0 +1,46 @@
+# Mendefinisikan versi Api yang digunakan v1
+apiVersion: apps/v1
+
+# Mendefinisikan resource object Deployment
+kind: Deployment
+
+# Mendefinisikan nama Deployments 'karsajobs' dengan label 'frontend' dan type 'frontend'
+metadata:
+  labels:
+    app: frontend
+    type: frontend
+  name: karsajobs-ui
+
+# Spesifikasi Deployment
+spec:
+
+  # Menentukan replica Pod berjumlah 1
+  replicas: 1
+
+  # Selector untuk mengidentifikasi Pod yang memiliki label type:frontend
+  selector:
+    matchLabels:
+      type: frontend
+
+  # Pod template untuk metadata
+  template:
+    metadata:
+
+      # Menargetkan Pod yang memiliki Label type frontend
+      labels:
+        app: frontend
+        type: frontend
+
+    # Pod template untuk spesifikasi Container
+    spec:
+      containers:
+
+        # Memberi nama karsajobs-backend
+        - name: karsajobs-frontend
+
+          # Mengambil image dari github package
+          image: ghcr.io/sanikhsan/a433-microservices/karsajobs-ui:latest
+
+          # Mengekspos Port 8000
+          ports:
+            - containerPort: 8000
